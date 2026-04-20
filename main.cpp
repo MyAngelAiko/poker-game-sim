@@ -1,6 +1,9 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <random>
+#include <algorithm>
+#include <bits/std_thread.h>
 
 class deck {
 private:
@@ -22,6 +25,20 @@ public:
             std::cout << cards[i] << std::endl;
         }
     }
+
+    void shuffleDeck(std::pmr::vector<std::string> vec) {
+        std::random_device rd;
+        std::mt19937 g(rd());
+
+        for (int i = vec.size() - 1; i > 0; i--) {
+            std::uniform_int_distribution<int> dist(0, i);
+            int j = dist(g);
+            std::swap(vec[i], vec[j]);
+        }
+
+
+    }
+    //I decided to use a Fisher-Yates shuffle over just randomly picking cards from an unshuffled deck cuz it felt cooler lol
 
 
 };
