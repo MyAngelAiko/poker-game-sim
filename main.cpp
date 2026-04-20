@@ -5,11 +5,11 @@
 #include <algorithm>
 #include <bits/std_thread.h>
 
-class deck {
+class Deck {
 private:
     std::pmr::vector<std::string> cards;
 public:
-    deck() {
+    Deck() {
         std::pmr::vector<std::string> suits = {"Hearts", "Clubs", "Diamonds", "Spades"};
         std::pmr::vector<std::string> ranks = {"2", "3", "4", "5", "6", "7", "8", "9", "10","Jack", "Queen", "King", "Ace"};
 
@@ -26,17 +26,15 @@ public:
         }
     }
 
-    void shuffleDeck(std::pmr::vector<std::string> vec) {
+    void shuffleDeck() {
         std::random_device rd;
         std::mt19937 g(rd());
 
-        for (int i = vec.size() - 1; i > 0; i--) {
+        for (int i = cards.size() - 1; i > 0; i--) {
             std::uniform_int_distribution<int> dist(0, i);
             int j = dist(g);
-            std::swap(vec[i], vec[j]);
+            std::swap(cards[i], cards[j]);
         }
-
-
     }
     //I decided to use a Fisher-Yates shuffle over just randomly picking cards from an unshuffled deck cuz it felt cooler lol
 
@@ -44,6 +42,7 @@ public:
 };
 
 int main() {
-    deck deck;
-    deck.printDeck();
+    Deck myDeck;
+    myDeck.shuffleDeck();
+    myDeck.printDeck();
 }
