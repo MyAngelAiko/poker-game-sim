@@ -55,7 +55,6 @@ private:
     std::pmr::vector<Card> cards;
 public:
     Deck() {
-
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 13; j++) {
                 cards.push_back(Card{
@@ -90,11 +89,25 @@ public:
         std::cout << "your cards are: " << rankToString(firstCard.rank) << " of " << suitToString(firstCard.suit) <<  " and " << rankToString(secondCard.rank) <<  " of " << suitToString(secondCard.suit) << std::endl;
     }
 
+    void flop() const {
+        Card firstFlop = cards[2];
+        Card secondFlop = cards[3];
+        Card thirdFlop = cards[4];
+        Card fourthFlop = cards[5];
+        Card fifthFlop = cards[6];
 
+        std::cout << "Flop: \n" ;
+
+        for (int i = 2; i < 7; i++) {
+            std::cout << rankToString(cards[i].rank) << " of " << suitToString(cards[i].suit) << std::endl;
+        }
+    }
 };
 
 int main() {
     Deck myDeck;
     myDeck.shuffleDeck();
     myDeck.dealCards();
+    myDeck.flop();
+    return 0;
 }
