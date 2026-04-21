@@ -84,8 +84,10 @@ public:
     }
     //I decided to use a Fisher-Yates shuffle over just randomly picking cards from an unshuffled deck cuz it felt cooler lol
 
-    void dealCards() {
-
+    void dealCards() const {
+        Card firstCard = cards[0];
+        Card secondCard = cards[1];
+        std::cout << "your cards are: " << rankToString(firstCard.rank) << " of " << suitToString(firstCard.suit) <<  " and " << rankToString(secondCard.rank) <<  " of " << suitToString(secondCard.suit) << std::endl;
     }
 
 
@@ -94,5 +96,5 @@ public:
 int main() {
     Deck myDeck;
     myDeck.shuffleDeck();
-    myDeck.printDeck();
+    myDeck.dealCards();
 }
