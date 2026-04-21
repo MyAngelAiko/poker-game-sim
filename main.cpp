@@ -4,6 +4,7 @@
 #include <random>
 #include <algorithm>
 #include <bits/std_thread.h>
+
 enum class Suit {
     Hearts,
     Clubs,
@@ -27,10 +28,10 @@ std::string suitToString(Suit suit) {
         case Suit::Diamonds: return "Diamonds";
         case Suit::Spades: return "Spades";
     }
-    return "";
+    return "error";
 }
 
-std::string suitToRank(Rank rank) {
+std::string rankToString(Rank rank) {
     switch (rank) {
         case Rank::Two: return "Two";
         case Rank::Three: return "Three";
@@ -46,7 +47,7 @@ std::string suitToRank(Rank rank) {
         case Rank::King: return "King";
         case Rank::Ace: return "Ace";
     }
-    return "";
+    return "error";
 }
 
 class Deck {
@@ -65,9 +66,9 @@ public:
         }
     }
 
-    void printDeck() {
+    void printDeck() const {
         for (int i = 0; i < cards.size(); i++) {
-            std::cout << cards[i] << std::endl;
+            std::cout << rankToString(cards[i].rank) << " of " << suitToString(cards[i].suit) << std::endl;
         }
     }
 
