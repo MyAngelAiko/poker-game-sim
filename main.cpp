@@ -3,6 +3,8 @@
 #include <string>
 #include <random>
 #include <algorithm>
+#include <filesystem>
+#include <ranges>
 #include <bits/std_thread.h>
 
 enum class Suit {
@@ -113,6 +115,27 @@ public:
     }
 
     void compareToFlop() {
+
+        std::vector<Card> allCards;
+        for (int i = 0; i < 5; i++) {
+            allCards.push_back(playerCards[i]);
+        }
+        for (int j = 0; j < 2; j++) {
+            allCards.push_back(flopCards[j]);
+        }
+        for (int x = 0; x < allCards.size() - 1; x++) {
+            for (int y = 0; y < allCards.size() - x - 1; y++) {
+                if (allCards[y].rank > allCards[y + 1].rank) {
+                    std::swap(allCards[y], allCards[y + 1]);
+                }
+            }
+        }
+
+        for (int z = 0; z < allCards.size() - 1; z++) {
+            std::cout << rankToString(allCards[z].rank) << " of " << suitToString(allCards[z].suit) << std::endl ;
+        }
+
+
         for (const auto& playerCard : playerCards) {
             for (const auto& flopCard : flopCards) {
                 if (playerCard.rank == flopCard.rank) {
