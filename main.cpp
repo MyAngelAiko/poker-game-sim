@@ -53,6 +53,8 @@ std::string rankToString(Rank rank) {
 class Deck {
 private:
     std::pmr::vector<Card> cards;
+    std::pmr::vector<Card> playerCards;
+    std::pmr::vector<Card> flopCards;
 public:
     Deck() {
         for (int i = 0; i < 4; i++) {
@@ -83,24 +85,32 @@ public:
     }
     //I decided to use a Fisher-Yates shuffle over just randomly picking cards from an unshuffled deck cuz it felt cooler lol
 
-    void dealCards() const {
-        Card firstCard = cards[0];
-        Card secondCard = cards[1];
-        std::cout << "your cards are: " << rankToString(firstCard.rank) << " of " << suitToString(firstCard.suit) <<  " and " << rankToString(secondCard.rank) <<  " of " << suitToString(secondCard.suit) << std::endl;
+    Card dealCard() {
+        Card top = cards.back();
+        cards.pop_back();
+        return top;
     }
 
-    void flop() const {
-        Card firstFlop = cards[2];
-        Card secondFlop = cards[3];
-        Card thirdFlop = cards[4];
-        Card fourthFlop = cards[5];
-        Card fifthFlop = cards[6];
-
-        std::cout << "Flop: \n" ;
-
-        for (int i = 2; i < 7; i++) {
-            std::cout << rankToString(cards[i].rank) << " of " << suitToString(cards[i].suit) << std::endl;
+    void dealCards() {
+        playerCards.push_back(dealCard());
+        playerCards.push_back(dealCard());
+        std::cout << "Your cards are: \n";
+        for (const auto& card : playerCards) {
+            std::cout << rankToString(card.rank) << " of " << suitToString(card.suit) << std::endl;
         }
+    }
+
+    void flop() {
+        for (int i = 0; i < 5; i++) {
+            flopCards.push_back(dealCard());
+        }
+        std::cout << "Flop cards are: \n";
+        for (const auto& card : flopCards) {
+            std::cout << rankToString(card.rank) << " of " << suitToString(card.suit) << std::endl;
+        }
+    }
+
+    void compareToFlop(Card card) {
     }
 };
 
