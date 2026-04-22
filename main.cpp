@@ -55,6 +55,8 @@ private:
     std::pmr::vector<Card> cards;
     std::pmr::vector<Card> playerCards;
     std::pmr::vector<Card> flopCards;
+    bool pair = false;
+    std::string pairedRank = {""};
 public:
     Deck() {
         for (int i = 0; i < 4; i++) {
@@ -110,7 +112,22 @@ public:
         }
     }
 
-    void compareToFlop(Card card) {
+    void compareToFlop() {
+        for (const auto& playerCard : playerCards) {
+            for (const auto& flopCard : flopCards) {
+                if (playerCard.rank == flopCard.rank) {
+                    pairedRank = rankToString(playerCard.rank);
+                    pair = true;
+                    return;
+                }
+            }
+        }
+    }
+
+    void finalResult() const {
+        if (pair == true) {
+            std::cout << "You have a matching pair of " << pairedRank << "s" << std::endl;
+        }
     }
 };
 
@@ -119,5 +136,7 @@ int main() {
     myDeck.shuffleDeck();
     myDeck.dealCards();
     myDeck.flop();
+    myDeck.compareToFlop();
+    myDeck.finalResult();
     return 0;
 }
