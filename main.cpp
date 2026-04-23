@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <filesystem>
 #include <ranges>
+#include <bits/atomic_lockfree_defines.h>
 #include <bits/std_thread.h>
 
 enum class Suit {
@@ -15,7 +16,7 @@ enum class Suit {
 };
 
 enum class Rank {
-    Two, Three, Four, Five, Six, Seven, Eight, Nine, Ten, Jack, Queen, King, Ace
+    Two = 1, Three = 2, Four = 3, Five = 4, Six = 5, Seven = 6, Eight = 7, Nine = 8, Ten = 9, Jack = 10, Queen = 11, King = 12, Ace = 13
 };
 
 struct Card {
@@ -59,6 +60,7 @@ private:
     std::pmr::vector<Card> flopCards;
     bool pair = false;
     std::string pairedRank = {""};
+    bool straight = false;
 public:
     Deck() {
         for (int i = 0; i < 4; i++) {
@@ -117,22 +119,44 @@ public:
     void compareToFlop() {
 
         std::vector<Card> allCards;
+
         for (int i = 0; i < 5; i++) {
             allCards.push_back(playerCards[i]);
         }
-        for (int j = 0; j < 2; j++) {
-            allCards.push_back(flopCards[j]);
+        for (int i = 0; i < 2; i++) {
+            allCards.push_back(flopCards[i]);
         }
-        for (int x = 0; x < allCards.size() - 1; x++) {
-            for (int y = 0; y < allCards.size() - x - 1; y++) {
-                if (allCards[y].rank > allCards[y + 1].rank) {
-                    std::swap(allCards[y], allCards[y + 1]);
+        for (int i = 0; i < allCards.size() - 1; i++) {
+            for (int j = 0; j < allCards.size() - i - 1; j++) {
+                if (allCards[j].rank > allCards[j + 1].rank) {
+                    std::swap(allCards[j], allCards[j + 1]);
                 }
             }
         }
+        int count = 1;
+        for (int i = 0; i < allCards.size() - 1; i++) {
+            int currentCard = static_cast<int>(allCards[i].rank);
+            int nextCard = static_cast<int>(allCards[i + 1].rank);
+
+            if (currentCard == nextCard) {
+                continue;
+            }
+            else if (currentCard + 1 == nextCard) {
+                count++;
+                if (count >= 5) {
+                    straight = true;
+                    break;
+                }
+            }
+            else {
+                count = 1;
+            }
+        }
+
+
 
         for (int z = 0; z < allCards.size() - 1; z++) {
-            std::cout << rankToString(allCards[z].rank) << " of " << suitToString(allCards[z].suit) << std::endl ;
+            std::cout << rankToString(allCards[z].rank) << " of " << suitToString(allCards[z].suit) << std::endl;
         }
 
 
