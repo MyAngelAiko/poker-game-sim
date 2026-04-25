@@ -62,6 +62,7 @@ private:
     bool pair = false;
     std::string pairedRank = {""};
     bool straight = false;
+    bool flush = false;
 public:
     Deck() {
         for (int i = 0; i < 4; i++) {
@@ -118,6 +119,8 @@ public:
     }
 
     void compareToFlop() {
+        allCards.clear();
+
         for (int i = 0; i < playerCards.size(); i++) {
             allCards.push_back(playerCards[i]);
         }
@@ -125,6 +128,41 @@ public:
         for (int i = 0; i < flopCards.size(); i++) {
             allCards.push_back(flopCards[i]);
         }
+
+        for (int i = 0; i < allCards.size() - 1; i++) {
+            for (int j = 0; j < allCards.size() - i - 1; j++) {
+                if (allCards[j].suit > allCards[j + 1].suit) {
+                    std::swap(allCards[j], allCards[j + 1]);
+                }
+            }
+        }
+
+        int countFlush = 1;
+        for (int i = 0; i < allCards.size() - 1; i++) {
+            int currentCard = static_cast<int>(allCards[i].suit);
+            int nextCard = static_cast<int>(allCards[i + 1].suit);
+
+            if (currentCard == nextCard) {
+                countFlush++;
+                if (countFlush >= 5) {
+                    flush = true;
+                    break;
+                }
+            }
+            else {
+                countFlush = 1;
+            }
+        }
+
+
+        for (int i = 0; i < allCards.size() - 1; i++) {
+            for (int j = 0; j < allCards.size() - i - 1; j++) {
+                if (allCards[j].rank > allCards[j + 1].rank) {
+                    std::swap(allCards[j], allCards[j + 1]);
+                }
+            }
+        }
+
 
         for (int i = 0; i < allCards.size() - 1; i++) {
             for (int j = 0; j < allCards.size() - i - 1; j++) {
@@ -166,7 +204,10 @@ public:
     }
 
     void finalResult() const {
-        if (straight == true) {
+        if (flush == true) {
+            std::cout << "You have a Flush!";
+        }
+        else if (straight == true) {
             std::cout << "You have a straight!";
         }
         else if (pair == true) {
