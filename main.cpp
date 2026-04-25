@@ -58,6 +58,7 @@ private:
     std::pmr::vector<Card> cards;
     std::pmr::vector<Card> playerCards;
     std::pmr::vector<Card> flopCards;
+    std::vector<Card> allCards;
     bool pair = false;
     std::string pairedRank = {""};
     bool straight = false;
@@ -67,7 +68,7 @@ public:
             for (int j = 0; j < 13; j++) {
                 cards.push_back(Card{
                     static_cast<Suit>(i),
-                    static_cast<Rank>(j)
+                    static_cast<Rank>(j + 1)
                 });
             }
         }
@@ -117,15 +118,14 @@ public:
     }
 
     void compareToFlop() {
-
-        std::vector<Card> allCards;
-
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < playerCards.size(); i++) {
             allCards.push_back(playerCards[i]);
         }
-        for (int i = 0; i < 2; i++) {
+
+        for (int i = 0; i < flopCards.size(); i++) {
             allCards.push_back(flopCards[i]);
         }
+
         for (int i = 0; i < allCards.size() - 1; i++) {
             for (int j = 0; j < allCards.size() - i - 1; j++) {
                 if (allCards[j].rank > allCards[j + 1].rank) {
@@ -133,6 +133,7 @@ public:
                 }
             }
         }
+
         int count = 1;
         for (int i = 0; i < allCards.size() - 1; i++) {
             int currentCard = static_cast<int>(allCards[i].rank);
@@ -153,13 +154,6 @@ public:
             }
         }
 
-
-
-        for (int z = 0; z < allCards.size() - 1; z++) {
-            std::cout << rankToString(allCards[z].rank) << " of " << suitToString(allCards[z].suit) << std::endl;
-        }
-
-
         for (const auto& playerCard : playerCards) {
             for (const auto& flopCard : flopCards) {
                 if (playerCard.rank == flopCard.rank) {
@@ -172,7 +166,10 @@ public:
     }
 
     void finalResult() const {
-        if (pair == true) {
+        if (straight == true) {
+            std::cout << "You have a straight!";
+        }
+        else if (pair == true) {
             std::cout << "You have a matching pair of " << pairedRank << "s" << std::endl;
         }
     }
