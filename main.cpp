@@ -63,6 +63,7 @@ private:
     std::string pairedRank = {""};
     bool straight = false;
     bool flush = false;
+    int pairCount = {0};
 public:
     Deck() {
         for (int i = 0; i < 4; i++) {
@@ -192,13 +193,15 @@ public:
             }
         }
 
-        for (const auto& playerCard : playerCards) {
-            for (const auto& flopCard : flopCards) {
-                if (playerCard.rank == flopCard.rank) {
-                    pairedRank = rankToString(playerCard.rank);
-                    pair = true;
-                    return;
-                }
+        std::vector<int> rankCount(13,0);
+        for (const auto& card : allCards) {
+            int rank = static_cast<int>(card.rank) - 1;
+            rankCount[rank]++;
+        }
+        for (int i = 0; i < 13; i++) {
+            if (rankCount[i] == 2) {
+                pair = true;
+                return;
             }
         }
     }
