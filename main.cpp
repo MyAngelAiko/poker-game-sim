@@ -60,6 +60,8 @@ private:
     std::pmr::vector<Card> flopCards;
     std::vector<Card> allCards;
     bool pair = false;
+    bool threeOfAKind = false;
+    bool fourOfAKind = false;
     std::string pairedRank = {""};
     bool straight = false;
     bool flush = false;
@@ -198,20 +200,33 @@ public:
             int rank = static_cast<int>(card.rank) - 1;
             rankCount[rank]++;
         }
-        for (int i = 0; i < 13; i++) {
-            if (rankCount[i] == 2) {
+        for (int i = 12; i >= 0; i--) {
+            if (rankCount[i] == 4) {
+                fourOfAKind = true;
+                break;
+            }
+            else if (rankCount[i] == 3) {
+                threeOfAKind = true;
+            }
+            else if (rankCount[i] == 2 && !pair) {
                 pair = true;
-                return;
+                pairedRank = std::to_string(rankCount[i]);
             }
         }
     }
 
     void finalResult() const {
-        if (flush == true) {
+        if (fourOfAKind == true) {
+            std::cout << "You have a four of a kind!";
+        }
+        else if (flush == true) {
             std::cout << "You have a Flush!";
         }
         else if (straight == true) {
             std::cout << "You have a straight!";
+        }
+        else if (threeOfAKind == true) {
+            std::cout << "You have a Three of a Kind!";
         }
         else if (pair == true) {
             std::cout << "You have a matching pair of " << pairedRank << "s" << std::endl;
