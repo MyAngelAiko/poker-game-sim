@@ -60,11 +60,15 @@ private:
     std::pmr::vector<Card> flopCards;
     std::vector<Card> allCards;
     bool pair = false;
-    bool threeOfAKind = false;
-    bool fourOfAKind = false;
     std::string pairedRank = {""};
+    bool threeOfAKind = false;
+    std::string threeOfAKindRank = {""};
+    bool fourOfAKind = false;
+    std::string fourOfAKindRank = {""};
     bool straight = false;
+    std::string straightRank = {""};
     bool flush = false;
+    std::string highcardRank = {""};
     int pairCount = {0};
 public:
     Deck() {
@@ -203,21 +207,26 @@ public:
         for (int i = 12; i >= 0; i--) {
             if (rankCount[i] == 4) {
                 fourOfAKind = true;
+                fourOfAKindRank = rankToString(static_cast<Rank>(i + 1));
                 break;
             }
             else if (rankCount[i] == 3) {
                 threeOfAKind = true;
+                threeOfAKindRank = rankToString(static_cast<Rank>(i + 1));
             }
             else if (rankCount[i] == 2 && !pair) {
                 pair = true;
-                pairedRank = std::to_string(rankCount[i]);
+                pairedRank = rankToString(static_cast<Rank>(i + 1));
             }
         }
     }
 
     void finalResult() const {
         if (fourOfAKind == true) {
-            std::cout << "You have a four of a kind!";
+            std::cout << "You have a four of a kind of " << fourOfAKindRank << "s!";
+        }
+        else if (threeOfAKind == true && pair == true) {
+            std::cout << "You have a full house!";
         }
         else if (flush == true) {
             std::cout << "You have a Flush!";
@@ -226,10 +235,13 @@ public:
             std::cout << "You have a straight!";
         }
         else if (threeOfAKind == true) {
-            std::cout << "You have a Three of a Kind!";
+            std::cout << "You have a Three of a Kind of " << threeOfAKindRank << "s!";
         }
         else if (pair == true) {
-            std::cout << "You have a matching pair of " << pairedRank << "s" << std::endl;
+            std::cout << "You have a matching pair of " << pairedRank << "s!" << std::endl;
+        }
+        else {
+            std::cout << "You have a high card!";
         }
     }
 };
