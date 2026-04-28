@@ -214,9 +214,13 @@ public:
                 threeOfAKind = true;
                 threeOfAKindRank = rankToString(static_cast<Rank>(i + 1));
             }
-            else if (rankCount[i] == 2 && !pair) {
+            else if (rankCount[i] == 2 && pair == false) {
                 pair = true;
                 pairedRank = rankToString(static_cast<Rank>(i + 1));
+                pairCount++;
+            }
+            else if (rankCount[i] == 2) {
+                pairCount++;
             }
         }
     }
@@ -236,6 +240,9 @@ public:
         }
         else if (threeOfAKind == true) {
             std::cout << "You have a Three of a Kind of " << threeOfAKindRank << "s!";
+        }
+        else if (pairCount >= 2) {
+            std::cout << "You have a twopair";
         }
         else if (pair == true) {
             std::cout << "You have a matching pair of " << pairedRank << "s!" << std::endl;
