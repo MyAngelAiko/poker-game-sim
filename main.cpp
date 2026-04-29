@@ -55,6 +55,7 @@ std::string rankToString(Rank rank) {
 
 class Deck {
 private:
+    std::vector<std::vector<Card>> players;
     std::pmr::vector<Card> cards;
     std::pmr::vector<Card> playerCards;
     std::pmr::vector<Card> flopCards;
@@ -71,7 +72,10 @@ private:
     std::string highcardRank = {""};
     int pairCount = {0};
 public:
-    Deck() {
+    Deck(int numPlayers) {
+        players.resize(numPlayers);
+
+
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 13; j++) {
                 cards.push_back(Card{
@@ -107,8 +111,16 @@ public:
     }
 
     void dealCards() {
-        playerCards.push_back(dealCard());
-        playerCards.push_back(dealCard());
+        for (int round = 0; round < 2; round++) {
+            for (auto& player: players) {
+                player.push_back(dealCard());
+            }
+        }
+
+        for (const auto& card: players[0]) {
+            playerCards.push_back(card);
+        }
+
         std::cout << "Your cards are: \n";
         for (const auto& card : playerCards) {
             std::cout << rankToString(card.rank) << " of " << suitToString(card.suit) << std::endl;
@@ -254,7 +266,10 @@ public:
 };
 
 int main() {
-    Deck myDeck;
+    std::cout << "How many players are there?";
+    int players;
+    std::cin >> players;
+    Deck myDeck(players);
     myDeck.shuffleDeck();
     myDeck.dealCards();
     myDeck.flop();
