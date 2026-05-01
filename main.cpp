@@ -139,7 +139,6 @@ public:
 
     void compareToFlop() {
         for (int p = 0; p < players.size(); p++) {
-
             pair = false;
             pairedRank = {""};
             threeOfAKind = false;
@@ -152,10 +151,12 @@ public:
             highcardRank = {""};
             pairCount = {0};
 
+            allCards.clear();
+
             for (const auto& card : players[p]) {
                 allCards.push_back(card);
             }
-            allCards.clear();
+
 
             for (int i = 0; i < flopCards.size(); i++) {
               allCards.push_back(flopCards[i]);
@@ -294,6 +295,5 @@ int main() {
     myDeck.dealCards();
     myDeck.flop();
     myDeck.compareToFlop();
-    myDeck.finalResult();
     return 0;
 }
