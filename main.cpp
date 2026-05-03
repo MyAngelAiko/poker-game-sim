@@ -259,6 +259,18 @@ public:
             printResult(strength);
           }
 
+        int best = 0;
+        int winner = 0;
+
+        for (int i = 0; i < handStrength.size(); i++) {
+            if (handStrength[i] > best) {
+                best = handStrength[i];
+                winner = i;
+            }
+        }
+        std::cout << "\nThe winner is player " << winner + 1 << " with a ";
+        printResult(best);
+
       }
 
     int finalResult() const {
