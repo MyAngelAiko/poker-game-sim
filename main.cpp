@@ -60,6 +60,7 @@ private:
     std::pmr::vector<Card> playerCards;
     std::pmr::vector<Card> flopCards;
     std::vector<Card> allCards;
+    std::vector<int> handStrength;
     bool pair = false;
     std::string pairedRank = {""};
     bool threeOfAKind = false;
@@ -252,13 +253,24 @@ public:
             }
 
             std::cout << "/nPlayer" << p + 1 << ": ";
-            finalResult();
+            printResult();
             std::cout << std::endl;
           }
 
       }
 
-    void finalResult() const {
+    int finalResult() const {
+        if (fourOfAKind) return 8;
+        else if (threeOfAKind && pair) return 7;
+        else if (flush) return 6;
+        else if (straight) return 5;
+        else if (threeOfAKind) return 4;
+        else if (pairCount >= 2) return 3;
+        else if (pair) return 2;
+        else return 1;
+    }
+
+    void printResult() const {
         if (fourOfAKind == true) {
             std::cout << "You have a four of a kind of " << fourOfAKindRank << "s!";
         }
