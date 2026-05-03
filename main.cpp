@@ -139,6 +139,7 @@ public:
     }
 
     void compareToFlop() {
+        handStrength.clear();
         for (int p = 0; p < players.size(); p++) {
             pair = false;
             pairedRank = {""};
@@ -252,9 +253,10 @@ public:
               }
             }
 
-            std::cout << "/nPlayer" << p + 1 << ": ";
-            printResult();
-            std::cout << std::endl;
+            int strength = finalResult();
+            handStrength.push_back(strength);
+            std::cout <<  "\nPlayer " << p + 1 << ": ";
+            printResult(strength);
           }
 
       }
@@ -270,30 +272,32 @@ public:
         else return 1;
     }
 
-    void printResult() const {
-        if (fourOfAKind == true) {
-            std::cout << "You have a four of a kind of " << fourOfAKindRank << "s!";
-        }
-        else if (threeOfAKind == true && pair == true) {
-            std::cout << "You have a full house!";
-        }
-        else if (flush == true) {
-            std::cout << "You have a Flush!";
-        }
-        else if (straight == true) {
-            std::cout << "You have a straight!";
-        }
-        else if (threeOfAKind == true) {
-            std::cout << "You have a Three of a Kind of " << threeOfAKindRank << "s!";
-        }
-        else if (pairCount >= 2) {
-            std::cout << "You have a twopair";
-        }
-        else if (pair == true) {
-            std::cout << "You have a matching pair of " << pairedRank << "s!" << std::endl;
-        }
-        else {
-            std::cout << "You have a high card!";
+    void printResult(int strength) const {
+        switch (strength) {
+            case 8:
+                std::cout << "Four of a kind";
+                break;
+            case 7:
+                std::cout << "Full house";
+                break;
+            case 6:
+                std::cout << "Flush";
+                break;
+            case 5:
+                std::cout << "Straight";
+                break;
+            case 4:
+                std::cout << "Three of a kind";
+                break;
+            case 3:
+                std::cout << "Two Pair";
+                break;
+            case 2:
+                std::cout << "Pair";
+                break;
+            case 1:
+                std::cout << "High Card";
+                break;
         }
     }
 };
