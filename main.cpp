@@ -60,7 +60,7 @@ private:
     std::pmr::vector<Card> playerCards;
     std::pmr::vector<Card> flopCards;
     std::vector<Card> allCards;
-    std::vector<int> handStrength;
+    std::vector<long long> handStrength;
     bool pair = false;
     std::string pairedRank = {""};
     bool threeOfAKind = false;
@@ -161,132 +161,145 @@ public:
 
 
             for (int i = 0; i < flopCards.size(); i++) {
-              allCards.push_back(flopCards[i]);
+                allCards.push_back(flopCards[i]);
             }
 
             for (int i = 0; i < allCards.size() - 1; i++) {
-              for (int j = 0; j < allCards.size() - i - 1; j++) {
-                  if (allCards[j].suit > allCards[j + 1].suit) {
-                    std::swap(allCards[j], allCards[j + 1]);
-                  }
-              }
+                for (int j = 0; j < allCards.size() - i - 1; j++) {
+                    if (allCards[j].suit > allCards[j + 1].suit) {
+                        std::swap(allCards[j], allCards[j + 1]);
+                    }
+                }
             }
 
             int countFlush = 1;
             for (int i = 0; i < allCards.size() - 1; i++) {
-              int currentCard = static_cast<int>(allCards[i].suit);
-              int nextCard = static_cast<int>(allCards[i + 1].suit);
+                int currentCard = static_cast<int>(allCards[i].suit);
+                int nextCard = static_cast<int>(allCards[i + 1].suit);
 
-              if (currentCard == nextCard) {
-                  countFlush++;
-                  if (countFlush >= 5) {
-                      flush = true;
-                      break;
-                  }
-              }
-              else {
-                countFlush = 1;
-              }
+                if (currentCard == nextCard) {
+                    countFlush++;
+                    if (countFlush >= 5) {
+                        flush = true;
+                        break;
+                    }
+                }
+                else {
+                    countFlush = 1;
+                }
             }
 
 
             for (int i = 0; i < allCards.size() - 1; i++) {
-               for (int j = 0; j < allCards.size() - i - 1; j++) {
-                  if (allCards[j].rank > allCards[j + 1].rank) {
-                      std::swap(allCards[j], allCards[j + 1]);
-                  }
-               }
+                for (int j = 0; j < allCards.size() - i - 1; j++) {
+                    if (allCards[j].rank > allCards[j + 1].rank) {
+                        std::swap(allCards[j], allCards[j + 1]);
+                    }
+                }
             }
 
 
             for (int i = 0; i < allCards.size() - 1; i++) {
-               for (int j = 0; j < allCards.size() - i - 1; j++) {
-                  if (allCards[j].rank > allCards[j + 1].rank) {
-                      std::swap(allCards[j], allCards[j + 1]);
-                  }
-               }
+                for (int j = 0; j < allCards.size() - i - 1; j++) {
+                    if (allCards[j].rank > allCards[j + 1].rank) {
+                        std::swap(allCards[j], allCards[j + 1]);
+                    }
+                }
             }
 
             int count = 1;
             for (int i = 0; i < allCards.size() - 1; i++) {
-              int currentCard = static_cast<int>(allCards[i].rank);
-              int nextCard = static_cast<int>(allCards[i + 1].rank);
+                int currentCard = static_cast<int>(allCards[i].rank);
+                int nextCard = static_cast<int>(allCards[i + 1].rank);
 
-              if (currentCard == nextCard) {
-                  continue;
-              }
-              else if (currentCard + 1 == nextCard) {
-                  count++;
-                  if (count >= 5) {
-                      straight = true;
-                      break;
-                  }
-              }
-              else {
-                  count = 1;
-              }
+                if (currentCard == nextCard) {
+                    continue;
+                }
+                else if (currentCard + 1 == nextCard) {
+                    count++;
+                    if (count >= 5) {
+                        straight = true;
+                        break;
+                    }
+                }
+                else {
+                    count = 1;
+                }
             }
 
             std::vector<int> rankCount(13,0);
             for (const auto& card : allCards) {
-              int rank = static_cast<int>(card.rank) - 1;
-              rankCount[rank]++;
+                int rank = static_cast<int>(card.rank) - 1;
+                rankCount[rank]++;
             }
 
             for (int i = 12; i >= 0; i--) {
-              if (rankCount[i] == 4) {
-                  fourOfAKind = true;
-                  fourOfAKindRank = rankToString(static_cast<Rank>(i + 1));
-                  break;
-              }
-              else if (rankCount[i] == 3) {
-                  threeOfAKind = true;
-                  threeOfAKindRank = rankToString(static_cast<Rank>(i + 1));
-              }
-              else if (rankCount[i] == 2 && pair == false) {
-                  pair = true;
-                  pairedRank = rankToString(static_cast<Rank>(i + 1));
-                  pairCount++;
-              }
-              else if (rankCount[i] == 2) {
-                  pairCount++;
-              }
+                if (rankCount[i] == 4) {
+                    fourOfAKind = true;
+                    fourOfAKindRank = rankToString(static_cast<Rank>(i + 1));
+                    break;
+                }
+                else if (rankCount[i] == 3) {
+                    threeOfAKind = true;
+                    threeOfAKindRank = rankToString(static_cast<Rank>(i + 1));
+                }
+                else if (rankCount[i] == 2 && pair == false) {
+                    pair = true;
+                    pairedRank = rankToString(static_cast<Rank>(i + 1));
+                    pairCount++;
+                }
+                else if (rankCount[i] == 2) {
+                    pairCount++;
+                }
             }
 
-            int strength = finalResult();
+
+            long long strength = finalResult();
             handStrength.push_back(strength);
             std::cout <<  "\nPlayer " << p + 1 << ": ";
             printResult(strength);
-          }
+
+        }
 
         int best = 0;
         int winner = 0;
 
         for (int i = 0; i < handStrength.size(); i++) {
-            if (handStrength[i] > best) {
-                best = handStrength[i];
+            if (handStrength[i] > handStrength[winner]) {
                 winner = i;
             }
         }
         std::cout << "\nThe winner is player " << winner + 1 << " with a ";
         printResult(best);
 
-      }
+    }
 
-    int finalResult() const {
-        if (fourOfAKind) return 8;
-        else if (threeOfAKind && pair) return 7;
-        else if (flush) return 6;
-        else if (straight) return 5;
-        else if (threeOfAKind) return 4;
-        else if (pairCount >= 2) return 3;
-        else if (pair) return 2;
-        else return 1;
+    long long finalResult() const {
+        long long value = 0;
+        if (fourOfAKind) value = 8;
+        else if (threeOfAKind && pair) value = 7;
+        else if (flush) value = 6;
+        else if (straight) value = 5;
+        else if (threeOfAKind) value = 4;
+        else if (pairCount >= 2) value = 3;
+        else if (pair) value = 2;
+        else value = 1;
+
+        value *= 1000000000;
+        long long multiplier = 1000000;
+
+        for (int i = allCards.size() - 1; i >= 0; i--) {
+            value += static_cast<int>(allCards[i].suit) * multiplier;
+            multiplier /= 10;
+            if (multiplier == 0) break;
+        }
+
+        return value;
     }
 
     void printResult(int strength) const {
         switch (strength) {
-            case 8:
+            case :
                 std::cout << "Four of a kind";
                 break;
             case 7:
