@@ -258,7 +258,10 @@ public:
             handStrength.push_back(strength);
             std::cout <<  "\nPlayer " << p + 1 << ": ";
             printResult(strength);
-
+            std::cout << " with a ";
+            for (const auto& card : players[p]) {
+                std::cout << rankToString(card.rank) << " of " << suitToString(card.suit) << " and ";
+            }
         }
 
         int best = 0;
@@ -270,6 +273,7 @@ public:
             }
         }
         std::cout << "\nThe winner is player " << winner + 1 << " with a ";
+        printResult(handStrength[winner]);
 
     }
 
