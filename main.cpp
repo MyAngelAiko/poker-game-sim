@@ -270,7 +270,6 @@ public:
             }
         }
         std::cout << "\nThe winner is player " << winner + 1 << " with a ";
-        printResult(best);
 
     }
 
@@ -289,7 +288,7 @@ public:
         long long multiplier = 1000000;
 
         for (int i = allCards.size() - 1; i >= 0; i--) {
-            value += static_cast<int>(allCards[i].suit) * multiplier;
+            value += static_cast<int>(allCards[i].rank) * multiplier;
             multiplier /= 10;
             if (multiplier == 0) break;
         }
@@ -297,32 +296,30 @@ public:
         return value;
     }
 
-    void printResult(int strength) const {
-        switch (strength) {
-            case :
-                std::cout << "Four of a kind";
-                break;
-            case 7:
-                std::cout << "Full house";
-                break;
-            case 6:
-                std::cout << "Flush";
-                break;
-            case 5:
-                std::cout << "Straight";
-                break;
-            case 4:
-                std::cout << "Three of a kind";
-                break;
-            case 3:
-                std::cout << "Two Pair";
-                break;
-            case 2:
-                std::cout << "Pair";
-                break;
-            case 1:
-                std::cout << "High Card";
-                break;
+    void printResult(long long strength) const {
+        if (strength > 8000000000) {
+            std::cout <<  "four of a kind";
+        }
+        else if (strength > 7000000000) {
+            std::cout << "full house";
+        }
+        else if (strength > 6000000000) {
+            std::cout << "flush";
+        }
+        else if (strength > 5000000000) {
+            std::cout << "straight";
+        }
+        else if (strength > 4000000000) {
+            std::cout << "three of a kind";
+        }
+        else if (strength > 3000000000) {
+            std::cout << "two pair";
+        }
+        else if (strength > 2000000000) {
+            std::cout << "pair";
+        }
+        else if (strength > 1000000000) {
+            std::cout << "high card";
         }
     }
 };
