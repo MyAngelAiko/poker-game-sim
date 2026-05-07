@@ -7,6 +7,7 @@
 #include <ranges>
 #include <bits/atomic_lockfree_defines.h>
 #include <bits/std_thread.h>
+#include <string>
 
 enum class Suit {
     Hearts,
@@ -76,13 +77,50 @@ public:
     Deck(int numPlayers) {
         players.resize(numPlayers);
 
-
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 13; j++) {
                 cards.push_back(Card{
                     static_cast<Suit>(i),
                     static_cast<Rank>(j + 1)
                 });
+            }
+        }
+    }
+
+    Card parseCard(const std::string& input) {
+        char r = input[0];
+        char s = input[1];
+
+        Rank rank;
+        Suit suit;
+
+        if (r == '2') rank = Rank::Two;
+        else if (r == '3') rank = Rank::Three;
+        else if (r == '4') rank = Rank::Four;
+        else if (r == '5') rank = Rank::Five;
+        else if (r == '6') rank = Rank::Six;
+        else if (r == '7') rank = Rank::Seven;
+        else if (r == '8') rank = Rank::Eight;
+        else if (r == '9') rank = Rank::Nine;
+        else if (r == 'T') rank = Rank::Ten;
+        else if (r == 'J') rank = Rank::Jack;
+        else if (r == 'Q') rank = Rank::Queen;
+        else if (r == 'K') rank = Rank::King;
+        else if (r == 'A') rank = Rank::Ace;
+
+        if (s == 'H') suit = Suit::Hearts;
+        else if (s == 'C') suit = Suit::Clubs;
+        else if (s == 'D') suit = Suit::Diamonds;
+        else if (s == 'S') suit = Suit::Spades;
+
+        return Card{ suit, rank };
+    }
+
+    void removeCardFromDeck(const Card& card) {
+        for (int i = 0; i < cards.size(); i++) {
+            if (cards[i].rank == card.rank && cards[i].suit == card.suit) {
+                cards.erase(cards.begin() + i);
+                return;
             }
         }
     }
@@ -322,7 +360,7 @@ public:
         else if (strength > 2000000000) {
             std::cout << "pair";
         }
-        else if (strength > 1000000000) {
+        else {
             std::cout << "high card";
         }
     }
@@ -333,9 +371,25 @@ int main() {
     int players;
     std::cin >> players;
     Deck myDeck(players);
-    myDeck.shuffleDeck();
-    myDeck.dealCards();
-    myDeck.flop();
-    myDeck.compareToFlop();
-    return 0;
+    std::cout << "Do you want to run ts as regular or a simulation?";
+    std::pmr::string modeInput;
+    std::cin >> modeInput;
+    if (modeInput == "regular") {
+        myDeck.shuffleDeck();
+        myDeck.dealCards();
+        myDeck.flop();
+        myDeck.compareToFlop();
+        return 0;
+    }
+    else if (modeInput == "simulation") {
+        myDeck.shuffleDeck();
+        myDeck.dealCards();
+        myDeck.flop();
+        myDeck.compareToFlop();
+        return 0;
+    }
+    else {
+        std::cout << "Invalid input";
+    }
+
 }
