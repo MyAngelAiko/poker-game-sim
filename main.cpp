@@ -125,6 +125,18 @@ public:
         }
     }
 
+    void inputMyCards() {
+        std::cout << "Enter your two cards (eg: AH or 9D): ";
+        std::string c1, c2;
+        Card card1 = parseCard(c1);
+        Card card2 = parseCard(c2);
+
+        players[0].push_back(card1);
+        players[0].push_back(card2);
+        removeCardFromDeck(card1);
+        removeCardFromDeck(card2);
+    }
+
     void printDeck() const {
         for (int i = 0; i < cards.size(); i++) {
             std::cout << rankToString(cards[i].rank) << " of " << suitToString(cards[i].suit) << std::endl;
