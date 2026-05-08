@@ -163,10 +163,12 @@ public:
 
     void dealCards() {
         for (int round = 0; round < 2; round++) {
-            for (auto& player: players) {
+            for (auto& player : players) {
+                if (player.size() >= 2) continue;
                 player.push_back(dealCard());
             }
         }
+
 
         for (const auto& card: players[0]) {
             playerCards.push_back(card);
