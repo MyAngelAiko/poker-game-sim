@@ -128,6 +128,7 @@ public:
     void inputMyCards() {
         std::cout << "Enter your two cards (eg: AH or 9D): ";
         std::string c1, c2;
+        std::cin >> c1 >> c2;
         Card card1 = parseCard(c1);
         Card card2 = parseCard(c2);
 
@@ -135,6 +136,16 @@ public:
         players[0].push_back(card2);
         removeCardFromDeck(card1);
         removeCardFromDeck(card2);
+    }
+
+    void inputFlop() {
+        std::cout << "Enter the flop cards! (eg: AH or 9D)";
+
+        for (int i = 0; i < 5; i++) {
+            std::string input;
+            std::cin >> input;
+            flopCards.push_back(parseCard(input));
+        }
     }
 
     void printDeck() const {
@@ -397,8 +408,9 @@ int main() {
     }
     else if (modeInput == "simulation") {
         myDeck.shuffleDeck();
+        myDeck.inputMyCards();
         myDeck.dealCards();
-        myDeck.flop();
+        myDeck.inputFlop();
         myDeck.compareToFlop();
         return 0;
     }
