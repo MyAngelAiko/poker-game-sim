@@ -136,6 +136,10 @@ public:
         players[0].push_back(card2);
         removeCardFromDeck(card1);
         removeCardFromDeck(card2);
+
+        for (const auto& card: players[0]) {
+            playerCards.push_back(card);
+        }
     }
 
     void inputFlop() {
@@ -173,16 +177,29 @@ public:
     }
 
     void dealCards() {
-        for (int round = 0; round < 2; round++) {
-            for (auto& player : players) {
-                if (player.size() >= 2) continue;
-                player.push_back(dealCard());
+        for (auto& player: players) {
+            player.clear();
+        }
+
+        if (playerCards.empty() != true) {
+            for (int i = 0; i < 2; i++) {
+                players[0].push_back(playerCards[i]);
             }
         }
 
-
-        for (const auto& card: players[0]) {
-            playerCards.push_back(card);
+        if (players[0].size() >= 2) {
+            for (int round = 0; round < 2; round++) {
+                for (int i = 1; i < players.size(); i++) {
+                    players[i].push_back(dealCard());
+                }
+            }
+        }
+        else {
+            for (int round = 0; round < 2; round++) {
+                for (auto& player : players) {
+                    player.push_back(dealCard());
+                }
+            }
         }
 
         std::cout << "Your cards are: \n";
@@ -407,10 +424,10 @@ int main() {
         return 0;
     }
     else if (modeInput == "simulation") {
-        myDeck.shuffleDeck();
         myDeck.inputMyCards();
-        myDeck.dealCards();
         myDeck.inputFlop();
+        myDeck.shuffleDeck();
+        myDeck.dealCards();
         myDeck.compareToFlop();
         return 0;
     }
