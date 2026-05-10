@@ -73,6 +73,9 @@ private:
     bool flush = false;
     std::string highcardRank = {""};
     int pairCount = {0};
+    int winner = {0};
+    int playerWins = {0};
+    int totalRuns = {0};
 public:
     Deck(int numPlayers) {
         players.resize(numPlayers);
@@ -333,7 +336,6 @@ public:
                 }
             }
 
-
             long long strength = finalResult();
             handStrength.push_back(strength);
             std::cout <<  "\nPlayer " << p + 1 << ": ";
@@ -345,16 +347,27 @@ public:
         }
 
         int best = 0;
-        int winner = 0;
 
         for (int i = 0; i < handStrength.size(); i++) {
             if (handStrength[i] > handStrength[winner]) {
                 winner = i;
             }
         }
-        std::cout << "\nThe winner is player " << winner + 1 << " with a ";
-        printResult(handStrength[winner]);
+        winner++;
+        std::cout << "\nThe winner is player " << winner << " with a ";
+        printResult(handStrength[winner - 1]);
 
+    }
+
+    void tally() {
+        if (winner == 1) {
+            playerWins++;
+            totalRuns++;
+        }
+        else {
+            totalRuns++;
+        }
+        std::cout << playerWins;
     }
 
     long long finalResult() const {
@@ -429,6 +442,7 @@ int main() {
         myDeck.shuffleDeck();
         myDeck.dealCards();
         myDeck.compareToFlop();
+        myDeck.tally();
         return 0;
     }
     else {
