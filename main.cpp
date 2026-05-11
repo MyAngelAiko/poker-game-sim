@@ -419,6 +419,27 @@ public:
             std::cout << "high card";
         }
     }
+
+    void resetDeck() {
+        cards.clear();
+
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 13; j++) {
+                cards.push_back(Card{
+                    static_cast<Suit>(i),
+                    static_cast<Rank>(j + 1)
+                });
+            }
+        }
+
+        for (const auto& card : playerCards) {
+            removeCardFromDeck(card);
+        }
+
+        for (const auto& card : playerCards) {
+            removeCardFromDeck(card);
+        }
+    }
 };
 
 int main() {
@@ -439,10 +460,13 @@ int main() {
     else if (modeInput == "simulation") {
         myDeck.inputMyCards();
         myDeck.inputFlop();
-        myDeck.shuffleDeck();
-        myDeck.dealCards();
-        myDeck.compareToFlop();
-        myDeck.tally();
+        for (int i = 0; i < 100; i++) {
+            myDeck.shuffleDeck();
+            myDeck.dealCards();
+            myDeck.compareToFlop();
+            myDeck.tally();
+            myDeck.resetDeck();
+        }
         return 0;
     }
     else {
