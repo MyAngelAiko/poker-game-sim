@@ -152,6 +152,8 @@ public:
             std::string input;
             std::cin >> input;
             flopCards.push_back(parseCard(input));
+            Card card = parseCard(input);
+            removeCardFromDeck(card);
         }
     }
 
@@ -179,7 +181,7 @@ public:
         return top;
     }
 
-    void dealCards() {
+    void dealCards(bool showOutput = true) {
         for (auto& player: players) {
             player.clear();
         }
@@ -204,10 +206,11 @@ public:
                 }
             }
         }
-
-        std::cout << "Your cards are: \n";
-        for (const auto& card : playerCards) {
-            std::cout << rankToString(card.rank) << " of " << suitToString(card.suit) << std::endl;
+        if (showOutput) {
+            std::cout << "Your cards are: \n";
+            for (const auto& card : playerCards) {
+                std::cout << rankToString(card.rank) << " of " << suitToString(card.suit) << std::endl;
+            }
         }
     }
 
@@ -221,7 +224,8 @@ public:
         }
     }
 
-    void compareToFlop() {
+    void compareToFlop(bool showOutput = true) {
+        winner = {0};
         handStrength.clear();
         for (int p = 0; p < players.size(); p++) {
             pair = false;
@@ -338,11 +342,13 @@ public:
 
             long long strength = finalResult();
             handStrength.push_back(strength);
-            std::cout <<  "\nPlayer " << p + 1 << ": ";
-            printResult(strength);
-            std::cout << " with a ";
-            for (const auto& card : players[p]) {
-                std::cout << rankToString(card.rank) << " of " << suitToString(card.suit) << " and ";
+            if (showOutput) {
+                std::cout <<  "\nPlayer " << p + 1 << ": ";
+                printResult(strength);
+                std::cout << " with a ";
+                for (const auto& card : players[p]) {
+                    std::cout << rankToString(card.rank) << " of " << suitToString(card.suit) << " and ";
+                }
             }
         }
 
@@ -354,9 +360,10 @@ public:
             }
         }
         winner++;
-        std::cout << "\nThe winner is player " << winner << " with a ";
-        printResult(handStrength[winner - 1]);
-
+        if (showOutput) {
+            std::cout << "\nThe winner is player " << winner << " with a ";
+            printResult(handStrength[winner - 1]);
+        }
     }
 
     void tally() {
@@ -367,7 +374,11 @@ public:
         else {
             totalRuns++;
         }
-        std::cout << playerWins;
+    }
+
+    void winChance() {
+        double winPercentage = ((double) playerWins / (double) totalRuns) * 100;
+        std::cout << "Your win percentage is: " << winPercentage << "%" << std::endl;
     }
 
     long long finalResult() const {
@@ -436,7 +447,7 @@ public:
             removeCardFromDeck(card);
         }
 
-        for (const auto& card : playerCards) {
+        for (const auto& card : flopCards) {
             removeCardFromDeck(card);
         }
     }
@@ -461,12 +472,13 @@ int main() {
         myDeck.inputMyCards();
         myDeck.inputFlop();
         for (int i = 0; i < 100; i++) {
-            myDeck.shuffleDeck();
-            myDeck.dealCards();
-            myDeck.compareToFlop();
-            myDeck.tally();
             myDeck.resetDeck();
+            myDeck.shuffleDeck();
+            myDeck.dealCards(false);
+            myDeck.compareToFlop(false);
+            myDeck.tally();
         }
+        myDeck.winChance();
         return 0;
     }
     else {
